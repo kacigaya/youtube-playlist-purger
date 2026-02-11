@@ -54,7 +54,7 @@ The script will automatically:
 ## Notes
 
 - **Rate limiting**: The script includes delays between actions to avoid triggering YouTube's rate limiting.
-- **Language**: The script looks for the "Remove from" button text. If your YouTube is in a different language, you may need to modify the text in the script.
+- **Language**: The script supports English ("Remove from") and French ("Supprimer de"). If your YouTube is in a different language, add your translation to the `removeBtn` check in the script.
 - **Undo**: This action cannot be undone. Make sure you want to remove all videos before running the script.
 
 ## License
