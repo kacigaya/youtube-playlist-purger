@@ -1,13 +1,22 @@
 async function RemoveAllVideos() {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  // Selector constants
+  const MENU_BTN =
+    "ytd-playlist-video-renderer #button.dropdown-trigger";
+  const MENU_POPUP =
+    "tp-yt-iron-dropdown:not([aria-hidden='true']) ytd-menu-service-item-renderer";
+  const REMOVE_ICON =
+    'tp-yt-iron-dropdown:not([aria-hidden="true"]) ytd-menu-service-item-renderer tp-yt-paper-item svg path[d^="M19 3h-4V2"]';
+
   function waitForElement(selector, timeout = 5000) {
     return new Promise((resolve) => {
-      const el = document.querySelector(selector);
+      const check = () => document.querySelector(selector);
+      const el = check();
       if (el) return resolve(el);
 
       const observer = new MutationObserver(() => {
-        const el = document.querySelector(selector);
+        const el = check();
         if (el) {
           observer.disconnect();
           resolve(el);
@@ -22,11 +31,11 @@ async function RemoveAllVideos() {
   }
 
   let deleted = 0;
+  let iterations = 0;
+  const MAX_ITERATIONS = 5000;
 
-  while (true) {
-    const menuBtn = document.querySelector(
-      "ytd-playlist-video-renderer #button.dropdown-trigger",
-    );
+  while (iterations++ < MAX_ITERATIONS) {
+    const menuBtn = document.querySelector(MENU_BTN);
     if (!menuBtn) {
       console.log(`Done! Removed ${deleted} video(s).`);
       break;
@@ -35,9 +44,7 @@ async function RemoveAllVideos() {
     menuBtn.click();
 
     // Wait for the popup menu to actually appear in the DOM
-    const popup = await waitForElement(
-      "tp-yt-iron-dropdown:not([aria-hidden='true']) ytd-menu-service-item-renderer",
-    );
+    const popup = await waitForElement(MENU_POPUP);
 
     if (!popup) {
       console.log("Menu didn't open, retrying...");
@@ -46,12 +53,10 @@ async function RemoveAllVideos() {
       continue;
     }
 
-    await delay(300);
-
     // Find the remove button by its trash icon SVG path (language-independent)
-    const removeBtn = document.querySelector(
-      'tp-yt-iron-dropdown:not([aria-hidden="true"]) ytd-menu-service-item-renderer tp-yt-paper-item svg path[d^="M19 3h-4V2"]',
-    )?.closest("ytd-menu-service-item-renderer");
+    const removeBtn = document
+      .querySelector(REMOVE_ICON)
+      ?.closest("ytd-menu-service-item-renderer");
 
     if (removeBtn) {
       removeBtn.click();
@@ -63,6 +68,12 @@ async function RemoveAllVideos() {
       document.body.click();
       await delay(500);
     }
+  }
+
+  if (iterations > MAX_ITERATIONS) {
+    console.log(
+      `Safety limit reached (${MAX_ITERATIONS} iterations). Removed ${deleted} video(s).`,
+    );
   }
 }
 
