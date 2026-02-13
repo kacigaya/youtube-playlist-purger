@@ -48,14 +48,10 @@ async function RemoveAllVideos() {
 
     await delay(300);
 
-    // Find the remove button from visible menu items
-    const menuItems = document.querySelectorAll(
-      "tp-yt-iron-dropdown:not([aria-hidden='true']) ytd-menu-service-item-renderer",
-    );
-    const removeBtn = [...menuItems].find((el) => {
-      const text = el.textContent.toLowerCase();
-      return text.includes("remove from") || text.includes("supprimer de");
-    });
+    // Find the remove button by its trash icon SVG path (language-independent)
+    const removeBtn = document.querySelector(
+      'tp-yt-iron-dropdown:not([aria-hidden="true"]) ytd-menu-service-item-renderer tp-yt-paper-item svg path[d^="M19 3h-4V2"]',
+    )?.closest("ytd-menu-service-item-renderer");
 
     if (removeBtn) {
       removeBtn.click();
