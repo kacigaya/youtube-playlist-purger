@@ -70,7 +70,7 @@ async function RemoveAllVideos() {
     }
   }
 
-  if (iterations > MAX_ITERATIONS) {
+  if (iterations >= MAX_ITERATIONS) {
     console.log(
       `Safety limit reached (${MAX_ITERATIONS} iterations). Removed ${deleted} video(s).`,
     );
