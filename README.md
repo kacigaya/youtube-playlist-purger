@@ -1,11 +1,13 @@
-# YouTube Playlist Purger
-
-A simple browser console script to bulk remove all videos from a YouTube playlist.
-
-<p align="left">
-  <img src="logo.svg" alt="YouTube Playlist Purger" width="200">
+<p align="center">
+  <img src="logo.svg" alt="Logo" width="200">
 </p>
 
+<h1 align="center">YouTube Playlist Purger</h1>
+
+<p align="center">
+   <strong>A simple browser console script to bulk remove all videos from a YouTube playlist.</strong><br>
+</p>
+ 
 ## Features
 
 - Automatically removes all videos from a YouTube playlist
